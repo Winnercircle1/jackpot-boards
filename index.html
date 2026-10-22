@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jackpot Winners — Last 48 Hours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Big+Shoulders+Display:wght@600;800&family=Archivo:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0C0906;          /* near-black walnut */
+    --panel:#161009;        /* card surface */
+    --edge:#2A2013;         /* hairline borders */
+    --gold-hi:#F7D774;      /* highlight gold */
+    --gold:#D4A93C;         /* body gold */
+    --gold-lo:#8A6E24;      /* shadow gold */
+    --cream:#F2EAD8;        /* primary text */
+    --brass:#9C8756;        /* labels */
+    --ruby:#8E2230;         /* progressive badge */
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(120vw 70vh at 50% -20%, #241708 0%, transparent 60%),
+      var(--ink);
+    color:var(--cream);
+    font-family:'Archivo',sans-serif;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    height:100vh;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    padding:1.6vh 3vw 1.2vh;
+    border-bottom:1px solid var(--edge);
+  }
+  .brand{justify-self:start;display:flex;align-items:center}
+  .brand img{height:7vh;width:auto;display:block}
+  .title{
+    justify-self:center;text-align:center;
+    font-family:'Cinzel',serif;font-weight:700;
+    font-size:3.6vh;letter-spacing:.35em;
+    background:linear-gradient(180deg,var(--gold-hi) 20%,var(--gold) 55%,var(--gold-lo));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .subtitle{
+    justify-self:end;
+    font-family:'Cinzel',serif;font-weight:500;
+    font-size:1.7vh;letter-spacing:.45em;color:var(--brass);
+  }
+
+  /* ---------- hero (newest win) ---------- */
+  .hero{
+    position:relative;
+    margin:2.2vh 3vw 0;
+    padding:2.4vh 3vw;
+    background:linear-gradient(180deg,#1D1409,var(--panel));
+    border:1px solid var(--gold-lo);
+    display:flex;align-items:center;justify-content:space-between;gap:2vw;
+    overflow:hidden;
+  }
+  .hero::after{ /* slow shimmer sweep */
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(115deg,transparent 40%,rgba(247,215,116,.10) 50%,transparent 60%);
+    transform:translateX(-120%);
+    animation:sweep 7s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes sweep{55%{transform:translateX(120%)}100%{transform:translateX(120%)}}
+  .hero .eyebrow{
+    font-family:'Cinzel',serif;font-size:1.5vh;letter-spacing:.4em;
+    color:var(--gold);margin-bottom:.8vh;
+  }
+  .hero .amount{
+    font-family:'Big Shoulders Display',sans-serif;font-weight:800;
+    font-size:10vh;line-height:1;font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,var(--gold-hi) 15%,var(--gold) 60%,var(--gold-lo));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    white-space:nowrap;
+  }
+  .hero .meta{text-align:right;min-width:0}
+  .hero .theme{
+    font-family:'Big Shoulders Display',sans-serif;font-weight:600;
+    font-size:4.4vh;line-height:1.05;letter-spacing:.04em;color:var(--cream);
+    text-transform:uppercase;
+  }
+  .hero .machine{font-size:2.1vh;color:var(--brass);margin-bottom:.8vh;letter-spacing:.12em}
+  .hero .when{font-size:2vh;color:var(--brass);margin-top:.5vh}
+
+  /* ---------- list ---------- */
+  .list{flex:1;min-height:0;overflow:hidden;margin:0 3vw 0;display:flex;flex-direction:column}
+  /* only the list may shrink; the hero, header and footer keep their full height */
+  header,.hero,.listhead,footer{flex-shrink:0}
+  .cols{
+    display:grid;
+    grid-template-columns:14vw 11vw 1fr 12vw 14vw;
+    align-items:center;gap:1.6vw;
+    padding:1.35vh 1.4vw;
+  }
+  .listhead{
+    margin:1.6vh 3vw 0;
+    padding-top:0;padding-bottom:.9vh;
+    border-bottom:1px solid var(--gold-lo);
+  }
+  .listhead div{
+    font-family:'Cinzel',serif;font-weight:500;
+    font-size:1.7vh;letter-spacing:.35em;color:var(--brass);
+  }
+  .listhead .h-when{text-align:right}
+  .row{
+    border-bottom:1px solid var(--edge);
+  }
+  .row .amount{
+    font-family:'Big Shoulders Display',sans-serif;font-weight:800;
+    font-size:4.4vh;font-variant-numeric:tabular-nums;
+    color:var(--gold);white-space:nowrap;
+  }
+  .row .theme{
+    min-width:0;
+    font-family:'Big Shoulders Display',sans-serif;font-weight:600;
+    font-size:3vh;line-height:1.05;letter-spacing:.05em;color:var(--cream);
+    text-transform:uppercase;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .row .machine{
+    font-family:'Big Shoulders Display',sans-serif;font-weight:600;
+    font-size:3vh;letter-spacing:.08em;color:var(--brass);
+    white-space:nowrap;
+  }
+  .row .when{font-size:2vh;color:var(--brass);text-align:right;white-space:nowrap}
+  .badge{
+    display:inline-block;vertical-align:middle;
+    font-family:'Archivo',sans-serif;
+    font-size:1.3vh;letter-spacing:.25em;font-weight:600;
+    padding:.35vh .7vw;
+    border:1px solid var(--gold-lo);color:var(--gold);
+    white-space:nowrap;
+  }
+  .badge.prog{border-color:var(--ruby);color:#E08A96}
+  .hero .badge{margin-left:1vw}
+
+  /* ---------- footer ---------- */
+  footer{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:1.6vh 3vw 2vh;border-top:1px solid var(--edge);
+  }
+  .total-label{font-family:'Cinzel',serif;font-size:1.8vh;letter-spacing:.35em;color:var(--brass)}
+  .total{
+    font-family:'Big Shoulders Display',sans-serif;font-weight:800;
+    font-size:4.6vh;font-variant-numeric:tabular-nums;
+    background:linear-gradient(180deg,var(--gold-hi),var(--gold-lo));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .stamp{font-size:1.6vh;color:#5C4F35}
+
+  .page-fade{animation:fadein .8s ease}
+  @keyframes fadein{from{opacity:0}to{opacity:1}}
+  @media (prefers-reduced-motion:reduce){
+    .hero::after{animation:none}
+    .page-fade{animation:none}
+  }
+
+  /* ---------- portrait / vertical screens ---------- */
+  @media (orientation:portrait){
+    header{
+      grid-template-columns:1fr;
+      justify-items:center;row-gap:.6vh;
+      padding:1.8vh 4vw 1.2vh;
+    }
+    .brand,.title,.subtitle{justify-self:center}
+    .brand img{height:5.5vh}
+    .title{font-size:2.4vh;letter-spacing:.24em;text-align:center}
+    .subtitle{font-size:1.2vh}
+
+    .hero{
+      flex-direction:column;align-items:flex-start;gap:.8vh;
+      margin:1.4vh 4vw 0;padding:1.8vh 4vw;
+    }
+    .hero .amount{font-size:6.5vh}
+    .hero .meta{text-align:left}
+    .hero .theme{font-size:2.6vh}
+    .hero .machine{font-size:1.5vh;margin-bottom:.4vh}
+    .hero .when{font-size:1.4vh}
+
+    .cols{grid-template-columns:19vw 10vw 1fr 17vw 16vw;gap:1.6vw;padding:1vh 1.5vw}
+    .listhead{margin:1.2vh 4vw 0}
+    .list{margin:0 4vw}
+    .listhead div{font-size:1.05vh;letter-spacing:.03em}
+    .row .amount{font-size:2.5vh}
+    .row .machine{font-size:1.9vh}
+    .row .theme{font-size:1.85vh;letter-spacing:.03em}
+    .row .when{font-size:1.35vh}
+    .badge{font-size:.95vh;letter-spacing:.08em;padding:.3vh .8vw}
+
+    footer{padding:1.1vh 4vw 1.5vh}
+    .total-label{font-size:1.25vh;letter-spacing:.2em}
+    .total{font-size:2.8vh}
+    .stamp{font-size:1.1vh}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><img id="logo" alt="" hidden></div>
+  <div class="title">JACKPOT WINNERS</div>
+  <div class="subtitle">LAST 48 HOURS</div>
+</header>
+
+<section class="hero" id="hero" hidden>
+  <div>
+    <div class="eyebrow">LATEST JACKPOT</div>
+    <div class="amount" id="heroAmount"></div>
+  </div>
+  <div class="meta">
+    <div class="machine" id="heroMachine"></div>
+    <div class="theme" id="heroTheme"></div>
+    <div class="when" id="heroWhen"></div>
+  </div>
+</section>
+
+<div class="cols listhead">
+  <div>JACKPOT</div>
+  <div>MACHINE</div>
+  <div>GAME</div>
+  <div>JACKPOT TYPE</div>
+  <div class="h-when">DATE / TIME</div>
+</div>
+
+<main class="list" id="list"></main>
+
+<footer>
+  <div><span class="total-label">TOTAL WON · LAST 30 DAYS&nbsp;&nbsp;</span><span class="total" id="total"></span></div>
+  <div class="stamp" id="stamp"></div>
+</footer>
+
+<script>
+/* ================= CONFIG ================= */
+const PORTRAIT = window.matchMedia("(orientation: portrait)").matches;
+/* Which property to show comes from the address: .../jackpot-boards/?p=silver-slipper
+   That property's folder holds its data.csv and logo.png. ?p=demo shows sample data. */
+const PROP = (new URLSearchParams(location.search).get("p") || "").trim().toLowerCase();
+const PROP_OK = /^[a-z0-9-]+$/.test(PROP);
+const DEMO = PROP === "demo";
+const SHEET_CSV_URL   = PROP + "/data.csv";
+const REFRESH_MINUTES = 10;   // how often to re-fetch the sheet
+const ROWS_PER_PAGE   = PORTRAIT ? 10 : 6; // list rows shown at once (after the hero)
+const PAGE_SECONDS    = 9;    // rotation speed when more wins than fit
+const DISPLAY_HOURS   = 48;   // window for the on-screen list
+const TOTAL_DAYS      = 30;   // window for the footer total
+/* ========================================== */
+
+/* Sample rows so the board renders before the sheet is connected.
+   (Real data from your file: recent wins + a few older ones so the
+   30-day total demonstrably exceeds what's listed on screen.) */
+const SAMPLE = `ASSETNUM,GAME_THEME,AMT_WON,TRANSACTION_DATE,WIN_TYPE
+11134,GO GHOST - SPOOKY LINK,8156.58,2026-07-22 20:57:47,Progressive
+6840,UFL OLVERA STREET,5385.00,2026-07-22 15:54:16,Jackpot
+8567,SIZZLING 7S,2000.00,2026-07-22 15:25:03,Jackpot
+6266,JACKS OR BETTER - 3P,5000.00,2026-07-22 14:50:28,Jackpot
+8566,SIZZLING 7S,2000.00,2026-07-22 13:26:20,Jackpot
+11025,SILK ROAD,13547.94,2026-07-22 13:25:00,Progressive
+6819,JACKS OR BETTER - 3P,4822.50,2026-07-22 13:07:07,Jackpot
+8566,SIZZLING 7S,2000.00,2026-07-22 12:57:43,Jackpot
+11134,GO GHOST - SPOOKY LINK,3206.75,2026-07-22 11:24:06,Jackpot
+11043,ULTIMATE FIRE LINK OLVERA STREET,2613.00,2026-07-22 09:48:33,Jackpot
+8510,JACKS OR BETTER - 1P,2000.00,2026-07-22 04:02:46,Jackpot
+8511,JACKS OR BETTER - 1P,10000.00,2026-07-22 03:19:06,Jackpot
+8582,GOLDEN CENTURY - DC,3975.00,2026-07-22 02:09:22,Jackpot
+11138,QUEEN CHIU - PL,2054.40,2026-07-21 20:56:11,Jackpot
+11107,LAVA LOCK,6777.40,2026-07-21 18:27:34,Jackpot
+11142,ULTIMATE FIRE LINK CHINA STREET,11797.80,2026-07-21 15:05:21,Progressive
+9030,DBL TOP DOLLAR,2700.00,2026-07-21 07:12:30,Jackpot
+6621,JACKS OR BETTER,2000.00,2026-07-21 01:37:51,Jackpot
+6626,JACKS OR BETTER,2000.00,2026-07-21 00:47:49,Jackpot
+9001,DRAGON LINK GOLDEN CENTURY,15000.00,2026-07-10 19:22:10,Progressive
+8543,BUFFALO GOLD,4200.00,2026-07-03 14:05:44,Jackpot
+11002,LIGHTNING CASH,7350.25,2026-06-25 21:40:12,Progressive`;
+
+let allWins = [], listWins = [], page = 0, pageTimer = null;
+
+const money = n => "$" + n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const whenFmt = d => PORTRAIT
+  ? (d.getMonth()+1) + "/" + d.getDate() + " " +
+    d.toLocaleString("en-US",{hour:"numeric",minute:"2-digit"})
+  : d.toLocaleString("en-US",{month:"short",day:"numeric"}) +
+    " · " + d.toLocaleString("en-US",{hour:"numeric",minute:"2-digit"});
+const clean = s => (s||"").trim().replace(/\s+/g," ");
+
+/* Splits one CSV line, respecting "quoted, values" so a comma in a game
+   name doesn't shift the columns. */
+function splitCsvLine(line){
+  const out = []; let cur = "", q = false;
+  for(let i = 0; i < line.length; i++){
+    const ch = line[i];
+    if(q){
+      if(ch === '"' && line[i+1] === '"'){ cur += '"'; i++; }
+      else if(ch === '"') q = false;
+      else cur += ch;
+    }else if(ch === '"') q = true;
+    else if(ch === ","){ out.push(cur); cur = ""; }
+    else cur += ch;
+  }
+  out.push(cur);
+  return out;
+}
+
+function parseCsv(text){
+  const lines = text.trim().split(/\r?\n/);
+  const head = splitCsvLine(lines.shift()).map(h=>h.trim().toUpperCase());
+  const iA = head.indexOf("ASSETNUM"), iG = head.indexOf("GAME_THEME"),
+        iW = head.indexOf("AMT_WON"),  iD = head.indexOf("TRANSACTION_DATE"),
+        iT = head.indexOf("WIN_TYPE");
+  return lines.map(l=>{
+    const c = splitCsvLine(l);
+    return {
+      machine: clean(c[iA]),
+      theme:   clean(iG >= 0 ? c[iG] : ""),
+      amount:  parseFloat((c[iW]||"").replace(/[$,]/g,"")),
+      date:    new Date((c[iD]||"").replace(" ","T")),
+      type:    clean(c[iT])
+    };
+  })
+  .filter(w=>w.machine && !isNaN(w.amount) && !isNaN(w.date))
+  .sort((a,b)=>b.date-a.date);
+}
+
+function applyWindows(){
+  /* In demo mode the sample dates are fixed, so anchor the windows to
+     the newest win instead of the wall clock. */
+  const now = DEMO && allWins.length ? allWins[0].date.getTime() : Date.now();
+  const listCutoff  = now - DISPLAY_HOURS*3600*1000;
+  const totalCutoff = now - TOTAL_DAYS*24*3600*1000;
+
+  listWins = allWins.filter(w=>w.date.getTime() >= listCutoff);
+  return allWins
+    .filter(w=>w.date.getTime() >= totalCutoff)
+    .reduce((s,w)=>s+w.amount,0);
+}
+
+function badge(type){
+  const prog = /prog/i.test(type||"");
+  return `<span class="badge${prog?" prog":""}">${prog?"PROGRESSIVE":"JACKPOT"}</span>`;
+}
+
+function render(total30){
+  clearTimeout(pageTimer);
+  const hero = document.getElementById("hero");
+  const list = document.getElementById("list");
+
+  document.getElementById("total").textContent =
+    "$" + total30.toLocaleString("en-US",{maximumFractionDigits:0});
+  document.getElementById("stamp").textContent =
+    "Updated " + new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+
+  if(!listWins.length){
+    hero.hidden = true;
+    list.innerHTML = `<div class="row"><div class="theme" style="padding:4vh 0;white-space:normal">
+      Every machine is loaded and waiting — the next big win could be yours.</div></div>`;
+    return;
+  }
+
+  const [top, ...rest] = listWins;
+  hero.hidden = false;
+  document.getElementById("heroAmount").textContent = money(top.amount);
+  document.getElementById("heroTheme").textContent  = top.theme || "";
+  document.getElementById("heroMachine").innerHTML  =
+    "MACHINE " + top.machine + badge(top.type);
+  document.getElementById("heroWhen").textContent   = whenFmt(top.date);
+
+  const pages = Math.max(1, Math.ceil(rest.length / ROWS_PER_PAGE));
+  page = page % pages;
+  const slice = rest.slice(page*ROWS_PER_PAGE, page*ROWS_PER_PAGE + ROWS_PER_PAGE);
+
+  list.innerHTML = slice.map(w=>`
+    <div class="cols row page-fade">
+      <div class="amount">${money(w.amount)}</div>
+      <div class="machine">${w.machine}</div>
+      <div class="theme">${w.theme || "&nbsp;"}</div>
+      <div>${badge(w.type)}</div>
+      <div class="when">${whenFmt(w.date)}</div>
+    </div>`).join("");
+
+  if(pages > 1){
+    pageTimer = setTimeout(()=>{ page++; render(total30); }, PAGE_SECONDS*1000);
+  }
+}
+
+async function load(){
+  try{
+    if(DEMO){
+      allWins = parseCsv(SAMPLE);
+    }else{
+      const res = await fetch(SHEET_CSV_URL + "?cb=" + Date.now(), {cache:"no-store"});
+      if(!res.ok) throw new Error(res.status);
+      allWins = parseCsv(await res.text());
+    }
+  }catch(e){
+    console.error("Sheet fetch failed; keeping last good data.", e);
+  }
+  page = 0;
+  render(applyWindows());
+}
+
+if(!PROP_OK){
+  /* No (or a mistyped) ?p= in the address — say so instead of showing an empty board. */
+  document.getElementById("list").innerHTML = `<div class="row"><div class="theme" style="padding:4vh 0;white-space:normal">
+    Board address is missing the property. Add ?p=property-folder to the end of the URL.</div></div>`;
+}else{
+  if(!DEMO){
+    const logo = document.getElementById("logo");
+    logo.onload  = () => { logo.hidden = false; };
+    logo.src = PROP + "/logo.png";
+  }
+  load();
+  setInterval(load, REFRESH_MINUTES*60*1000);
+}
+</script>
+</body>
+</html>
